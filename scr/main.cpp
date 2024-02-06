@@ -43,29 +43,29 @@ void solve(int x, int y, bool ver, int num)
         return;
     }
     // do some checking
-    for (auto &it : temp_result)
-    {
-        // Print the values
-        cout << it << ' ';
-    }
-    for (auto &it : temp_result_point)
-    {
-        // Print the values
-        cout << it.first << "," << it.second << ' ';
-    }
-    cout << endl;
+    // for (auto &it : temp_result)
+    // {
+    //     // Print the values
+    //     cout << it << ' ';
+    // }
+    // for (auto &it : temp_result_point)
+    // {
+    //     // Print the values
+    //     cout << it.first << "," << it.second << ' ';
+    // }
+    // cout << endl;
     int value = 0;
     for (int i = 0; i < number_of_sequences; i++)
     {
         if (isSubArray(temp_result, list_sequence[i]))
         {
-            cout << "aaa";
+            // cout << "aaa";
             value += list_reward[i];
         }
     }
     if (value > max_value)
     {
-        cout << ":coi" << endl;
+        // cout << ":coi" << endl;
         result = temp_result;
         max_value = value;
         result_point = temp_result_point;
@@ -73,7 +73,7 @@ void solve(int x, int y, bool ver, int num)
 
     if (ver)
     {
-        cout << "a";
+        // cout << "a";
         // vertical move
         int temp = matrix[y][x];
         matrix[y][x] = -1;
@@ -81,7 +81,13 @@ void solve(int x, int y, bool ver, int num)
         temp_result_point.push_back(point);
         temp_result.push_back(temp);
         solve(x + 1, y, !ver, num + 1);
-        solve(x - 1, y, !ver, num + 1);
+        for (int i = 1; i < matrix_width; i++)
+        {
+            if (i != x)
+                solve(i, y, !ver, num + 1);
+        }
+        // if (x > 2)
+        //     solve(x - 2, y, !ver, num + 1);
 
         // cout << x << "aaa" << y << endl;
         matrix[y][x] = temp;
@@ -99,7 +105,12 @@ void solve(int x, int y, bool ver, int num)
         temp_result_point.push_back(point);
         temp_result.push_back(temp);
         solve(x, y + 1, !ver, num + 1);
-        solve(x, y - 1, !ver, num + 1);
+        // solve(x, y - 1, !ver, num + 1);
+        for (int i = 1; i < matrix_height; i++)
+        {
+            if (i != y)
+                solve(x, i, !ver, num + 1);
+        }
         // solve(x - 1, y, !ver, num + 1);
 
         matrix[y][x] = temp;
