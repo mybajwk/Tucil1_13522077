@@ -41,33 +41,18 @@ void solve(int x, int y, bool ver, int num)
 {
     if (matrix[y][x] == -1 || num > buffer_size)
     {
-        // cout << x << " " << y << "aaaaaaaa";
         return;
     }
-    // do some checking
-    // for (auto &it : temp_result)
-    // {
-    //     // Print the values
-    //     cout << it << ' ';
-    // }
-    // for (auto &it : temp_result_point)
-    // {
-    //     // Print the values
-    //     cout << it.first << "," << it.second << ' ';
-    // }
-    // cout << endl;
     int value = 0;
     for (int i = 0; i < number_of_sequences; i++)
     {
         if (isSubArray(temp_result, list_sequence[i]))
         {
-            // cout << "aaa";
             value += list_reward[i];
         }
     }
     if (value > max_value)
     {
-        // cout << ":coi" << endl;
         result = temp_result;
         max_value = value;
         result_point = temp_result_point;
@@ -75,28 +60,26 @@ void solve(int x, int y, bool ver, int num)
 
     if (ver)
     {
-        // cout << "a";
         // vertical move
         int temp = matrix[y][x];
         matrix[y][x] = -1;
         pair<int, int> point(y, x);
         temp_result_point.push_back(point);
         temp_result.push_back(temp);
-        // solve(x + 1, y, !ver, num + 1);
-        for (int i = 1; i < matrix_width; i++)
+        for (int i = 1; i < x; i++)
         {
-            if (i != x)
-                solve(i, y, !ver, num + 1);
+            solve(i, y, !ver, num + 1);
         }
-        // if (x > 2)
-        //     solve(x - 2, y, !ver, num + 1);
-
-        // cout << x << "aaa" << y << endl;
+        x++;
+        for (int i = x; i <= matrix_width; i++)
+        {
+            solve(i, y, !ver, num + 1);
+        }
+        x--;
         matrix[y][x] = temp;
         temp_result_point.pop_back();
         temp_result.pop_back();
-        solve(x, y + 1, ver, num);
-        // solve(x, y - 1, ver, num);
+        // solve(x, y + 1, ver, num);
     }
     else
     {
@@ -106,20 +89,20 @@ void solve(int x, int y, bool ver, int num)
         pair<int, int> point(y, x);
         temp_result_point.push_back(point);
         temp_result.push_back(temp);
-        // solve(x, y + 1, !ver, num + 1);
-        // solve(x, y - 1, !ver, num + 1);
-        for (int i = 1; i < matrix_height; i++)
+        for (int i = 1; i < y; i++)
         {
-            if (i != y)
-                solve(x, i, !ver, num + 1);
+            solve(x, i, !ver, num + 1);
         }
-        // solve(x - 1, y, !ver, num + 1);
-
+        y++;
+        for (int i = y; i <= matrix_height; i++)
+        {
+            solve(x, i, !ver, num + 1);
+        }
+        y--;
         matrix[y][x] = temp;
         temp_result_point.pop_back();
         temp_result.pop_back();
-        solve(x + 1, y, ver, num);
-        // solve(x - 1, y, ver, num);
+        // solve(x + 1, y, ver, num);
     }
 }
 
@@ -127,7 +110,7 @@ int main()
 {
     max_value = 0;
     // read from file
-    ifstream file("input.in");
+    ifstream file("input.txt");
     if (!file.is_open())
     {
         cout << "Error opening file, check the file!!" << endl;
@@ -181,18 +164,25 @@ int main()
     }
     auto start = high_resolution_clock::now();
     // start
-    int temp = matrix[1][6];
-    matrix[1][6] = -1;
-    pair<int, int> point(6, 1);
-    temp_result_point.push_back(point);
-    temp_result.push_back(temp);
-    //
-    cout << "a " << endl;
-    solve(6, 2, true, 1);
-    cout << "a " << endl;
+    for (int i = 1; i <= matrix_width; i++)
+    {
+
+        int temp = matrix[1][i];
+        matrix[1][i] = -1;
+        pair<int, int> point(i, 1);
+        temp_result_point.push_back(point);
+        temp_result.push_back(temp);
+        for (int j = 2; j <= matrix_height; j++)
+            solve(i, j, true, 1);
+        matrix[1][i] = temp;
+        temp_result_point.pop_back();
+        temp_result.pop_back();
+    }
+
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start);
     cout << duration.count() << endl;
+
     for (auto &it : result)
     {
         // Print the values
