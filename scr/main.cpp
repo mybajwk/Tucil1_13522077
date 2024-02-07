@@ -1,7 +1,9 @@
 #include <bits/stdc++.h>
 #include <sstream>
 #include <fstream>
+#include <chrono>
 using namespace std;
+using namespace std::chrono;
 
 int buffer_size, matrix_width, matrix_height, number_of_sequences;
 vector<vector<int>> matrix;
@@ -80,7 +82,7 @@ void solve(int x, int y, bool ver, int num)
         pair<int, int> point(y, x);
         temp_result_point.push_back(point);
         temp_result.push_back(temp);
-        solve(x + 1, y, !ver, num + 1);
+        // solve(x + 1, y, !ver, num + 1);
         for (int i = 1; i < matrix_width; i++)
         {
             if (i != x)
@@ -104,7 +106,7 @@ void solve(int x, int y, bool ver, int num)
         pair<int, int> point(y, x);
         temp_result_point.push_back(point);
         temp_result.push_back(temp);
-        solve(x, y + 1, !ver, num + 1);
+        // solve(x, y + 1, !ver, num + 1);
         // solve(x, y - 1, !ver, num + 1);
         for (int i = 1; i < matrix_height; i++)
         {
@@ -177,17 +179,20 @@ int main()
         list_reward.push_back(reward);
         getline(file, sequence_all);
     }
-
+    auto start = high_resolution_clock::now();
     // start
-    int temp = matrix[1][1];
-    matrix[1][1] = -1;
-    pair<int, int> point(1, 1);
+    int temp = matrix[1][6];
+    matrix[1][6] = -1;
+    pair<int, int> point(6, 1);
     temp_result_point.push_back(point);
     temp_result.push_back(temp);
     //
     cout << "a " << endl;
-    solve(1, 2, true, 1);
+    solve(6, 2, true, 1);
     cout << "a " << endl;
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
+    cout << duration.count() << endl;
     for (auto &it : result)
     {
         // Print the values
