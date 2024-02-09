@@ -1,0 +1,21 @@
+Excute in 161 ms
+List sequence and reward
+1C E9 
+10
+
+BD 7A BD 
+20
+
+BD 1C BD 1C 
+30
+
+Total Reward
+50
+7A BD 7A BD 1C BD 1C 
+1, 1
+1, 4
+3, 4
+3, 5
+6, 5
+6, 3
+2, 3

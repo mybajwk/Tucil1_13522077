@@ -1,4 +1,5 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
 #include <sstream>
 #include <fstream>
 #include <chrono>
@@ -12,21 +13,22 @@ vector<int> list_reward;
 vector<pair<int, int>> result_point, temp_result_point;
 vector<string> result, temp_result;
 int min_buffer;
-int max_value;
+int max_value, maximax;
 int debug;
 int len_result;
 bool found;
 
 bool isSubArray(const vector<string> &arr, const vector<string> &subarr)
 {
-    size_t arrSize = arr.size(), subarrSize = subarr.size();
+    int arrSize = arr.size();
+    int subarrSize = subarr.size();
     if (arrSize < subarrSize)
         return false;
 
-    for (size_t i = 0; i <= arrSize - subarrSize; ++i)
+    for (int i = 0; i <= arrSize - subarrSize; ++i)
     {
         bool match = true;
-        for (size_t j = 0; j < subarrSize; ++j)
+        for (int j = 0; j < subarrSize; ++j)
         {
             if (arr[i + j] != subarr[j])
             {
@@ -47,24 +49,21 @@ void solve(int x, int y, bool ver, int num)
         return;
     }
     int value = 0;
-    if (num >= min_buffer)
-    {
 
-        for (int i = 0; i < number_of_sequences; i++)
+    for (int i = 0; i < number_of_sequences; i++)
+    {
+        if (isSubArray(temp_result, list_sequence[i]))
         {
-            if (isSubArray(temp_result, list_sequence[i]))
-            {
-                value += list_reward[i];
-            }
+            value += list_reward[i];
         }
-        if (value > max_value || (value == max_value && len_result > num))
-        {
-            found = true;
-            len_result = num;
-            result = temp_result;
-            max_value = value;
-            result_point = temp_result_point;
-        }
+    }
+    if (value > max_value || (value == max_value && len_result > num))
+    {
+        found = true;
+        len_result = num;
+        result = temp_result;
+        max_value = value;
+        result_point = temp_result_point;
     }
 
     if (ver)
@@ -113,6 +112,8 @@ void solve(int x, int y, bool ver, int num)
 
 int main()
 {
+    ios::sync_with_stdio(0);
+    maximax = 0;
     len_result = 10000000;
     max_value = 0;
     min_buffer = 1000000;
@@ -125,7 +126,7 @@ int main()
         cout << "input name file: ";
         cin >> name_file;
         // read from file
-        ifstream file(name_file);
+        ifstream file("./" + name_file);
         if (!file.is_open())
         {
             cout << "Error opening file, check the file!!" << endl;
@@ -179,6 +180,7 @@ int main()
                 min_buffer = len;
             }
             file >> reward;
+            maximax += reward;
             list_sequence.push_back(sequence);
             list_reward.push_back(reward);
             getline(file, sequence_all);
@@ -190,7 +192,7 @@ int main()
         int token_unik;
         cout << "Masukkan jumlah token unik: ";
         cin >> token_unik;
-        string token[token_unik];
+        string token[1000];
         cout << "Masukkan token unik: ";
         for (int i = 0; i < token_unik; i++)
         {
@@ -243,8 +245,10 @@ int main()
             }
             int reward;
             list_sequence.push_back(sequence);
+
             // range 10 to 50
             reward = (rand() % 41) + 10;
+            maximax += reward;
             list_reward.push_back(reward);
         }
     }
@@ -266,7 +270,6 @@ int main()
 
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start);
-    cout << "Excute in " << duration.count() / 1000 << " ms" << endl;
 
     if (found)
     {
@@ -305,9 +308,9 @@ int main()
         for (auto &it : result_point)
         {
             // Print the values
-            cout << it.first << ", " << it.second << endl;
+            cout << it.second << ", " << it.first << endl;
         }
-
+        cout << "Excute in " << duration.count() / 1000 << " ms" << endl;
         string output_choice, file_name;
         cout << "Mau save? (y/n) case sensitive: ";
         cin >> output_choice;
@@ -315,7 +318,7 @@ int main()
         {
             cout << "Masukkan nama file (nama saja): ";
             cin >> file_name;
-            ofstream outputFile(file_name + ".txt");
+            ofstream outputFile("./../test/" + file_name + ".txt");
 
             if (outputFile.is_open())
             {
@@ -342,9 +345,16 @@ int main()
                 for (auto &it : result_point)
                 {
                     // Print the values
-                    outputFile << it.first << ", " << it.second << endl;
+                    outputFile << it.second << ", " << it.first << endl;
                 }
-                cout << "Data was written to " << file_name << ".txt" << endl;
+                outputFile << "Excute in " << duration.count() / 1000 << " ms" << endl;
+                outputFile.close();
+                cout
+                    << "Data was written to " << file_name << ".txt" << endl;
+            }
+            else
+            {
+                cout << "failed write to file" << endl;
             }
         }
     }
