@@ -11,9 +11,11 @@ vector<vector<string>> list_sequence;
 vector<int> list_reward;
 vector<pair<int, int>> result_point, temp_result_point;
 vector<string> result, temp_result;
+int min_buffer;
 int max_value;
 int debug;
 int len_result;
+bool found;
 
 bool isSubArray(const vector<string> &arr, const vector<string> &subarr)
 {
@@ -45,19 +47,24 @@ void solve(int x, int y, bool ver, int num)
         return;
     }
     int value = 0;
-    for (int i = 0; i < number_of_sequences; i++)
+    if (num >= min_buffer)
     {
-        if (isSubArray(temp_result, list_sequence[i]))
+
+        for (int i = 0; i < number_of_sequences; i++)
         {
-            value += list_reward[i];
+            if (isSubArray(temp_result, list_sequence[i]))
+            {
+                value += list_reward[i];
+            }
         }
-    }
-    if (value > max_value || (value == max_value && len_result > temp_result.size()))
-    {
-        len_result = temp_result.size();
-        result = temp_result;
-        max_value = value;
-        result_point = temp_result_point;
+        if (value > max_value || (value == max_value && len_result > num))
+        {
+            found = true;
+            len_result = num;
+            result = temp_result;
+            max_value = value;
+            result_point = temp_result_point;
+        }
     }
 
     if (ver)
@@ -108,6 +115,8 @@ int main()
 {
     len_result = 10000000;
     max_value = 0;
+    min_buffer = 1000000;
+    found = false;
     string name_file, input_choice;
     cout << "Pilih mau pakai file atau tidak (sebagai input)? y/n (case sensitive): ";
     cin >> input_choice;
@@ -158,10 +167,16 @@ int main()
             getline(file, sequence_all);
             stringstream ss(sequence_all);
             string sequence_part;
+            int len;
             while (!ss.eof())
             {
                 getline(ss, sequence_part, ' ');
                 sequence.push_back(sequence_part);
+                len++;
+            }
+            if (len < min_buffer)
+            {
+                min_buffer = len;
             }
             file >> reward;
             list_sequence.push_back(sequence);
@@ -217,6 +232,10 @@ int main()
         for (int i = 0; i < number_of_sequences; i++)
         {
             int len = (rand() % maks_sequnces) + 1;
+            if (len < min_buffer)
+            {
+                min_buffer = len;
+            }
             vector<string> sequence;
             for (int j = 0; j < len; j++)
             {
@@ -247,84 +266,91 @@ int main()
 
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start);
-    cout << duration.count() << endl;
+    cout << "Excute in " << duration.count() / 1000 << " ms" << endl;
 
-    cout << "Result:" << endl
-         << endl;
-    cout << "Matrix" << endl;
-    for (auto &it : matrix)
+    if (found)
     {
-        for (auto &it1 : it)
-        {
-            cout << it1 << " ";
-        }
-        cout << endl;
-    }
-
-    cout << "List sequence and reward" << endl;
-    for (int i = 0; i < number_of_sequences; i++)
-    {
-        int len = list_sequence[i].size();
-        for (int j = 0; j < len; j++)
-        {
-            cout << list_sequence[i][j] << " ";
-        }
-        cout << endl;
-        cout << list_reward[i] << endl
+        cout << "Result:" << endl
              << endl;
-    }
-    cout << "Total Reward" << endl;
-    cout << max_value << endl;
-    for (auto &it : result)
-    {
-        // Print the values
-        cout << it << " ";
-    }
-    cout << endl;
-    for (auto &it : result_point)
-    {
-        // Print the values
-        cout << it.first << ", " << it.second << endl;
-    }
-
-    string output_choice, file_name;
-    cout << "Mau save? (y/n) case sensitive: ";
-    cin >> output_choice;
-    if (output_choice == "y")
-    {
-        cout << "Masukkan nama file (nama saja): ";
-        cin >> file_name;
-        ofstream outputFile(file_name + ".txt");
-
-        if (outputFile.is_open())
+        cout << "Matrix" << endl;
+        for (auto &it : matrix)
         {
-            outputFile << "List sequence and reward" << endl;
-            for (int i = 0; i < number_of_sequences; i++)
+            for (auto &it1 : it)
             {
-                int len = list_sequence[i].size();
-                for (int j = 0; j < len; j++)
+                cout << it1 << " ";
+            }
+            cout << endl;
+        }
+
+        cout << "List sequence and reward" << endl;
+        for (int i = 0; i < number_of_sequences; i++)
+        {
+            int len = list_sequence[i].size();
+            for (int j = 0; j < len; j++)
+            {
+                cout << list_sequence[i][j] << " ";
+            }
+            cout << endl;
+            cout << list_reward[i] << endl
+                 << endl;
+        }
+        cout << "Total Reward" << endl;
+        cout << max_value << endl;
+        for (auto &it : result)
+        {
+            // Print the values
+            cout << it << " ";
+        }
+        cout << endl;
+        for (auto &it : result_point)
+        {
+            // Print the values
+            cout << it.first << ", " << it.second << endl;
+        }
+
+        string output_choice, file_name;
+        cout << "Mau save? (y/n) case sensitive: ";
+        cin >> output_choice;
+        if (output_choice == "y")
+        {
+            cout << "Masukkan nama file (nama saja): ";
+            cin >> file_name;
+            ofstream outputFile(file_name + ".txt");
+
+            if (outputFile.is_open())
+            {
+                outputFile << "List sequence and reward" << endl;
+                for (int i = 0; i < number_of_sequences; i++)
                 {
-                    outputFile << list_sequence[i][j] << " ";
+                    int len = list_sequence[i].size();
+                    for (int j = 0; j < len; j++)
+                    {
+                        outputFile << list_sequence[i][j] << " ";
+                    }
+                    outputFile << endl;
+                    outputFile << list_reward[i] << endl
+                               << endl;
+                }
+                outputFile << "Total Reward" << endl;
+                outputFile << max_value << endl;
+                for (auto &it : result)
+                {
+                    // Print the values
+                    outputFile << it << " ";
                 }
                 outputFile << endl;
-                outputFile << list_reward[i] << endl
-                           << endl;
+                for (auto &it : result_point)
+                {
+                    // Print the values
+                    outputFile << it.first << ", " << it.second << endl;
+                }
+                cout << "Data was written to " << file_name << ".txt" << endl;
             }
-            outputFile << "Total Reward" << endl;
-            outputFile << max_value << endl;
-            for (auto &it : result)
-            {
-                // Print the values
-                outputFile << it << " ";
-            }
-            outputFile << endl;
-            for (auto &it : result_point)
-            {
-                // Print the values
-                outputFile << it.first << ", " << it.second << endl;
-            }
-            cout << "Data was written to " << file_name << ".txt" << endl;
         }
+    }
+    else
+    {
+        cout << "Tidak ada hasilnya tu..." << endl;
     }
     return 0;
 }
