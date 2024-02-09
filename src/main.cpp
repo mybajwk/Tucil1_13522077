@@ -57,7 +57,7 @@ void solve(int x, int y, bool ver, int num)
             value += list_reward[i];
         }
     }
-    if (value > max_value || (value == max_value && len_result > num))
+    if (value > max_value || (value == max_value && found && len_result > num))
     {
         found = true;
         len_result = num;
@@ -311,56 +311,60 @@ int main()
             cout << it.second << ", " << it.first << endl;
         }
         cout << "Excute in " << duration.count() / 1000 << " ms" << endl;
-        string output_choice, file_name;
-        cout << "Mau save? (y/n) case sensitive: ";
-        cin >> output_choice;
-        if (output_choice == "y")
-        {
-            cout << "Masukkan nama file (nama saja): ";
-            cin >> file_name;
-            ofstream outputFile("./../test/" + file_name + ".txt");
-
-            if (outputFile.is_open())
-            {
-                outputFile << "List sequence and reward" << endl;
-                for (int i = 0; i < number_of_sequences; i++)
-                {
-                    int len = list_sequence[i].size();
-                    for (int j = 0; j < len; j++)
-                    {
-                        outputFile << list_sequence[i][j] << " ";
-                    }
-                    outputFile << endl;
-                    outputFile << list_reward[i] << endl
-                               << endl;
-                }
-                outputFile << "Total Reward" << endl;
-                outputFile << max_value << endl;
-                for (auto &it : result)
-                {
-                    // Print the values
-                    outputFile << it << " ";
-                }
-                outputFile << endl;
-                for (auto &it : result_point)
-                {
-                    // Print the values
-                    outputFile << it.second << ", " << it.first << endl;
-                }
-                outputFile << "Excute in " << duration.count() / 1000 << " ms" << endl;
-                outputFile.close();
-                cout
-                    << "Data was written to " << file_name << ".txt" << endl;
-            }
-            else
-            {
-                cout << "failed write to file" << endl;
-            }
-        }
     }
     else
     {
         cout << "Tidak ada hasilnya tu..." << endl;
+        cout << "Total Reward \n0" << endl;
+        cout << "Excute in " << duration.count() / 1000 << " ms" << endl;
+    }
+
+    // saving
+    string output_choice, file_name;
+    cout << "Mau save? (y/n) case sensitive: ";
+    cin >> output_choice;
+    if (output_choice == "y")
+    {
+        cout << "Masukkan nama file (nama saja): ";
+        cin >> file_name;
+        ofstream outputFile("./../test/" + file_name + ".txt");
+
+        if (outputFile.is_open())
+        {
+            outputFile << "List sequence and reward" << endl;
+            for (int i = 0; i < number_of_sequences; i++)
+            {
+                int len = list_sequence[i].size();
+                for (int j = 0; j < len; j++)
+                {
+                    outputFile << list_sequence[i][j] << " ";
+                }
+                outputFile << endl;
+                outputFile << list_reward[i] << endl
+                           << endl;
+            }
+            outputFile << "Total Reward" << endl;
+            outputFile << max_value << endl;
+            for (auto &it : result)
+            {
+                // Print the values
+                outputFile << it << " ";
+            }
+            outputFile << endl;
+            for (auto &it : result_point)
+            {
+                // Print the values
+                outputFile << it.second << ", " << it.first << endl;
+            }
+            outputFile << "Excute in " << duration.count() / 1000 << " ms" << endl;
+            outputFile.close();
+            cout
+                << "Data was written to " << file_name << ".txt" << endl;
+        }
+        else
+        {
+            cout << "failed write to file" << endl;
+        }
     }
     return 0;
 }
