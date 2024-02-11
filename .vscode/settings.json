@@ -46,7 +46,8 @@
     "xtr1common": "cpp",
     "xutility": "cpp",
     "ratio": "cpp",
-    "iostream": "cpp"
+    "iostream": "cpp",
+    "unordered_set": "cpp"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }

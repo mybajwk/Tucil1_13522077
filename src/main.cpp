@@ -3,6 +3,7 @@
 #include <sstream>
 #include <fstream>
 #include <chrono>
+#include <unordered_set>
 using namespace std;
 using namespace std::chrono;
 
@@ -18,7 +19,13 @@ int debug;
 int len_result;
 bool found;
 
-bool isSubArray(const vector<string> &arr, const vector<string> &subarr)
+bool areAllUnique(vector<string> &vec)
+{
+    unordered_set<string> s(vec.begin(), vec.end());
+
+    return s.size() == vec.size();
+}
+bool isSubArray(vector<string> &arr, vector<string> &subarr)
 {
     int arrSize = arr.size();
     int subarrSize = subarr.size();
@@ -195,11 +202,27 @@ int main()
         int token_unik;
         cout << "Masukkan jumlah token unik: ";
         cin >> token_unik;
-        string token[1000];
-        cout << "Masukkan token unik: ";
-        for (int i = 0; i < token_unik; i++)
+        vector<string> token;
+        bool isNotUnik = true;
+        while (isNotUnik)
         {
-            cin >> token[i];
+
+            cout << "Masukkan token unik: ";
+            for (int i = 0; i < token_unik; i++)
+            {
+                string temp;
+                cin >> temp;
+                token.push_back(temp);
+            }
+            if (areAllUnique(token))
+            {
+                isNotUnik = false;
+            }
+            else
+            {
+                cout << "Tidak unik\n";
+                token.clear();
+            }
         }
         cout << "Masukkan jumlah ukuran buffer: ";
         cin >> buffer_size;
