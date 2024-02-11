@@ -261,7 +261,7 @@ int main()
 
         string temp = matrix[1][i];
         matrix[1][i] = "";
-        pair<int, int> point(i, 1);
+        pair<int, int> point(1, i);
         temp_result_point.push_back(point);
         temp_result.push_back(temp);
         for (int j = 2; j <= matrix_height; j++)
@@ -334,19 +334,7 @@ int main()
 
         if (outputFile.is_open())
         {
-            outputFile << "List sequence and reward" << endl;
-            for (int i = 0; i < number_of_sequences; i++)
-            {
-                int len = list_sequence[i].size();
-                for (int j = 0; j < len; j++)
-                {
-                    outputFile << list_sequence[i][j] << " ";
-                }
-                outputFile << endl;
-                outputFile << list_reward[i] << endl
-                           << endl;
-            }
-            outputFile << "Total Reward" << endl;
+
             outputFile << max_value << endl;
             for (auto &it : result)
             {
@@ -359,7 +347,8 @@ int main()
                 // Print the values
                 outputFile << it.second << ", " << it.first << endl;
             }
-            outputFile << "Excute in " << duration.count() / 1000 << " ms" << endl;
+            outputFile << "\n"
+                       << duration.count() / 1000 << " ms" << endl;
             outputFile.close();
             cout
                 << "Data was written to " << file_name << ".txt" << endl;

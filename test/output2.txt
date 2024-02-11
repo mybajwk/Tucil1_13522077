@@ -1,14 +1,3 @@
-List sequence and reward
-7A 
-1000
-
-BD 7A BD 
-20
-
-BD 1C BD 1C 
-30
-
-Total Reward
 1050
 7A BD 7A BD 1C BD 1C 
 1, 1
@@ -18,4 +7,5 @@ Total Reward
 6, 5
 6, 3
 2, 3
-Excute in 146 ms
+
+146 ms
