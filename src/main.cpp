@@ -126,7 +126,7 @@ int main()
         cout << "input name file: ";
         cin >> name_file;
         // read from file
-        ifstream file("./" + name_file);
+        ifstream file("./" + name_file + ".txt");
         if (!file.is_open())
         {
             cout << "Error opening file, check the file!!" << endl;
