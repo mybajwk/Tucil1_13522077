@@ -172,8 +172,11 @@ int main()
             while (!ss.eof())
             {
                 getline(ss, sequence_part, ' ');
-                sequence.push_back(sequence_part);
-                len++;
+                if (sequence_part != "")
+                {
+                    sequence.push_back(sequence_part);
+                    len++;
+                }
             }
             if (len < min_buffer)
             {
